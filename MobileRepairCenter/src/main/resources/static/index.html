@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mobile Repair Center</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-icon">📱</div>
+
+            <div>
+                <h2>MobileFix</h2>
+                <span>REPAIR CENTER</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <button class="nav-item active"
+                    onclick="showSection('dashboard')">
+                <span>📊</span>
+                Dashboard
+            </button>
+
+            <button class="nav-item"
+                    onclick="showSection('customers')">
+                <span>👥</span>
+                Customers
+            </button>
+
+            <button class="nav-item"
+                    onclick="showSection('devices')">
+                <span>📱</span>
+                Devices
+            </button>
+
+            <button class="nav-item"
+                    onclick="showSection('technicians')">
+                <span>🧑‍🔧</span>
+                Technicians
+            </button>
+
+            <button class="nav-item"
+                    onclick="showSection('repairs')">
+                <span>🔧</span>
+                Repair Orders
+            </button>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="main">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p>Mobile Repair Center Management System</p>
+            </div>
+
+            <div class="server-status">
+                <span class="status-dot"></span>
+                API Connected
+            </div>
+
+        </header>
+
+
+        <!-- ================= DASHBOARD ================= -->
+
+        <section id="dashboard" class="page-section active-section">
+
+            <div class="welcome-card">
+
+                <div>
+                    <span class="section-label">
+                        MOBILE REPAIR CENTER
+                    </span>
+
+                    <h2>
+                        Welcome to MobileFix
+                    </h2>
+
+                    <p>
+                        Manage customers, mobile devices,
+                        technicians and repair orders from one place.
+                    </p>
+                </div>
+
+                <div class="welcome-icon">
+                    📱
+                </div>
+
+            </div>
+
+
+            <!-- STAT CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+                    <div class="stat-icon blue">👥</div>
+
+                    <div>
+                        <span>Customers</span>
+                        <strong id="customerCount">0</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon purple">📱</div>
+
+                    <div>
+                        <span>Devices</span>
+                        <strong id="deviceCount">0</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon green">🧑‍🔧</div>
+
+                    <div>
+                        <span>Technicians</span>
+                        <strong id="technicianCount">0</strong>
+                    </div>
+                </div>
+
+
+                <div class="stat-card">
+                    <div class="stat-icon orange">🔧</div>
+
+                    <div>
+                        <span>Repair Orders</span>
+                        <strong id="repairCount">0</strong>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- DASHBOARD CONTENT -->
+
+            <div class="dashboard-grid">
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h3>Recent Repair Orders</h3>
+                            <p>Latest repair activity</p>
+                        </div>
+
+                        <button onclick="showSection('repairs')">
+                            View All
+                        </button>
+                    </div>
+
+                    <div id="recentRepairs"
+                         class="table-container">
+
+                        <div class="empty-state">
+                            Loading repairs...
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div>
+                            <h3>Quick Actions</h3>
+                            <p>Common operations</p>
+                        </div>
+                    </div>
+
+                    <div class="quick-actions">
+
+                        <button onclick="showSection('customers')">
+                            <span>👤</span>
+                            <strong>Add Customer</strong>
+                            <small>Register a new customer</small>
+                        </button>
+
+                        <button onclick="showSection('devices')">
+                            <span>📱</span>
+                            <strong>Add Device</strong>
+                            <small>Register customer device</small>
+                        </button>
+
+                        <button onclick="showSection('repairs')">
+                            <span>🔧</span>
+                            <strong>Create Repair</strong>
+                            <small>Create a repair order</small>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CUSTOMERS ================= -->
+
+        <section id="customers" class="page-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Customers</h2>
+                    <p>Manage customer information</p>
+                </div>
+
+                <button class="primary-btn"
+                        onclick="openCustomerForm()">
+                    + Add Customer
+                </button>
+
+            </div>
+
+
+            <!-- CUSTOMER FORM -->
+
+            <div id="customerForm"
+                 class="form-panel hidden">
+
+                <h3 id="customerFormTitle">
+                    Add Customer
+                </h3>
+
+                <form onsubmit="saveCustomer(event)">
+
+                    <input type="hidden"
+                           id="customerId">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input id="customerName"
+                                   type="text"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input id="customerPhone"
+                                   type="text"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input id="customerEmail"
+                                   type="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Address</label>
+                            <input id="customerAddress"
+                                   type="text">
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+
+                        <button type="button"
+                                class="secondary-btn"
+                                onclick="closeCustomerForm()">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="primary-btn">
+                            Save Customer
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- CUSTOMER TABLE -->
+
+            <div class="panel">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="customerTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= DEVICES ================= -->
+
+        <section id="devices" class="page-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Devices</h2>
+                    <p>Manage customer mobile devices</p>
+                </div>
+
+                <button class="primary-btn"
+                        onclick="openDeviceForm()">
+                    + Add Device
+                </button>
+
+            </div>
+
+
+            <!-- DEVICE FORM -->
+
+            <div id="deviceForm"
+                 class="form-panel hidden">
+
+                <h3 id="deviceFormTitle">
+                    Add Device
+                </h3>
+
+                <form onsubmit="saveDevice(event)">
+
+                    <input type="hidden"
+                           id="deviceId">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Customer</label>
+
+                            <select id="deviceCustomer"
+                                    required>
+                                <option value="">
+                                    Select Customer
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Brand</label>
+
+                            <input id="deviceBrand"
+                                   type="text"
+                                   placeholder="Samsung"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Model</label>
+
+                            <input id="deviceModel"
+                                   type="text"
+                                   placeholder="Galaxy S24"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>IMEI</label>
+
+                            <input id="deviceImei"
+                                   type="text">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Purchase Date</label>
+
+                            <input id="devicePurchaseDate"
+                                   type="date">
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+
+                        <button type="button"
+                                class="secondary-btn"
+                                onclick="closeDeviceForm()">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="primary-btn">
+                            Save Device
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- DEVICE TABLE -->
+
+            <div class="panel">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>IMEI</th>
+                            <th>Purchase Date</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="deviceTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= TECHNICIANS ================= -->
+
+        <section id="technicians" class="page-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Technicians</h2>
+                    <p>Manage repair technicians</p>
+                </div>
+
+                <button class="primary-btn"
+                        onclick="openTechnicianForm()">
+                    + Add Technician
+                </button>
+
+            </div>
+
+
+            <!-- TECHNICIAN FORM -->
+
+            <div id="technicianForm"
+                 class="form-panel hidden">
+
+                <h3 id="technicianFormTitle">
+                    Add Technician
+                </h3>
+
+                <form onsubmit="saveTechnician(event)">
+
+                    <input type="hidden"
+                           id="technicianId">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Name</label>
+
+                            <input id="technicianName"
+                                   type="text"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Phone</label>
+
+                            <input id="technicianPhone"
+                                   type="text"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Specialization</label>
+
+                            <input id="technicianSpecialization"
+                                   type="text"
+                                   placeholder="Android / iPhone">
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+
+                        <button type="button"
+                                class="secondary-btn"
+                                onclick="closeTechnicianForm()">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="primary-btn">
+                            Save Technician
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- TECHNICIAN TABLE -->
+
+            <div class="panel">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Specialization</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="technicianTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- ABOVE AVERAGE -->
+
+            <div class="panel average-panel">
+
+                <div class="panel-header">
+
+                    <div>
+                        <h3>Above Average Technicians</h3>
+                        <p>Technicians with above-average repair activity</p>
+                    </div>
+
+                    <button onclick="loadAboveAverage()">
+                        Refresh
+                    </button>
+
+                </div>
+
+                <div id="aboveAverageContainer">
+                    Click Refresh to load results.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= REPAIR ORDERS ================= -->
+
+        <section id="repairs" class="page-section">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Repair Orders</h2>
+                    <p>Create and manage mobile repairs</p>
+                </div>
+
+                <button class="primary-btn"
+                        onclick="openRepairForm()">
+                    + New Repair Order
+                </button>
+
+            </div>
+
+
+            <!-- REPAIR FORM -->
+
+            <div id="repairForm"
+                 class="form-panel hidden">
+
+                <h3>
+                    Create Repair Order
+                </h3>
+
+                <form onsubmit="saveRepair(event)">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label>Device</label>
+
+                            <select id="repairDevice"
+                                    required>
+                                <option value="">
+                                    Select Device
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Technician</label>
+
+                            <select id="repairTechnician"
+                                    required>
+                                <option value="">
+                                    Select Technician
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label>Issue Description</label>
+
+                            <textarea id="repairIssue"
+                                      rows="4"
+                                      placeholder="Describe the mobile problem..."
+                                      required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Repair Cost</label>
+
+                            <input id="repairCost"
+                                   type="number"
+                                   step="0.01"
+                                   min="0"
+                                   value="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Parts Cost</label>
+
+                            <input id="partsCost"
+                                   type="number"
+                                   step="0.01"
+                                   min="0"
+                                   value="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Status</label>
+
+                            <select id="repairStatus">
+
+                                <option value="RECEIVED">
+                                    RECEIVED
+                                </option>
+
+                                <option value="DIAGNOSING">
+                                    DIAGNOSING
+                                </option>
+
+                                <option value="IN_PROGRESS">
+                                    IN_PROGRESS
+                                </option>
+
+                                <option value="COMPLETED">
+                                    COMPLETED
+                                </option>
+
+                                <option value="DELIVERED">
+                                    DELIVERED
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+
+                        <button type="button"
+                                class="secondary-btn"
+                                onclick="closeRepairForm()">
+                            Cancel
+                        </button>
+
+                        <button type="submit"
+                                class="primary-btn">
+                            Create Repair Order
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+
+            <!-- REPAIR TABLE -->
+
+            <div class="panel">
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Device</th>
+                            <th>Technician</th>
+                            <th>Status</th>
+                            <th>Repair Cost</th>
+                            <th>Parts Cost</th>
+                            <th>Total</th>
+                            <th>Created</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="repairTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- ================= TOAST ================= -->
+
+<div id="toast"
+     class="toast">
+</div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>

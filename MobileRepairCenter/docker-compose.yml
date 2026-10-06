@@ -1,0 +1,41 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: mobile-repair-mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: dockerroot123
+      MYSQL_DATABASE: mobile_repair_db
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pDockerroot123"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    container_name: mobile-repair-app
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    ports:
+      - "8080:8080"
+
+    environment:
+      DB_PASSWORD: dockerroot123
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mobile_repair_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+      SPRING_DATASOURCE_USERNAME: root
+
+volumes:
+  mysql_data:
