@@ -1,5 +1,11 @@
 CREATE DATABASE IF NOT EXISTS mobile_repair_db;
 USE mobile_repair_db;
+SHOW TABLES;
+
+SELECT * FROM customers;
+SELECT * FROM devices;
+SELECT * FROM technicians;
+SELECT * FROM repair_orders;
 
 DROP TRIGGER IF EXISTS trg_repair_status_completed;
 DROP PROCEDURE IF EXISTS create_repair_order;
@@ -159,3 +165,32 @@ HAVING COUNT(r.id) > (
         GROUP BY technician_id
     ) x
 );
+
+SELECT
+    d.id,
+    d.brand,
+    d.model,
+    c.id AS customer_id,
+    c.name AS customer_name
+FROM devices d
+JOIN customers c ON d.customer_id = c.id;
+
+SELECT
+    r.id,
+    c.name AS customer_name,
+    d.brand,
+    d.model,
+    t.name AS technician_name,
+    r.repair_status,
+    r.repair_cost,
+    r.parts_cost,
+    r.total_bill
+FROM repair_orders r
+JOIN devices d ON r.device_id = d.id
+JOIN customers c ON d.customer_id = c.id
+JOIN technicians t ON r.technician_id = t.id
+ORDER BY r.id DESC;
+
+USE mobile_repair_db;
+
+SELECT * FROM repair_orders;
